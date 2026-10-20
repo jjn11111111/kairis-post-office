@@ -1,6 +1,6 @@
 {
   "schema": "KaiRis-Post-Office-Access-v0",
-  "gate_sha256": "6406672a07255661fa6c6d1182d9f8ab5f8bb98f4263a50893541e3cc12a19a4",
+  "gate_sha256": "c2654950f9a4676670c304bce6473104c9accd484cbdc44557d78399cb636a62",
   "steward_gate_sha256": null,
   "session_ttl_sec": 28800,
   "aces": {
