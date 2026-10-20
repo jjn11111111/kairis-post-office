@@ -43,7 +43,7 @@ export const LOCAL_SHORE_MODES = [
     id: 'pari-start',
     title: 'PortAbleRI symbiote path',
     blurb: 'Onboarding kernel · explicit begin · portableri.com.',
-    href: 'https://portableri.com/onboarding.html?begin=1&from=post-office',
+    href: 'https://portableri.com/onboarding.html?begin=1&from=symbiote-v1',
     external: true,
   },
 ];

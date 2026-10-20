@@ -1,24 +1,16 @@
 # kairis-post-office
 
-**Single-purpose repository:** KaiRis:T:siRiaK **POST OFFICE** (gated mail · mailboxes · Drive · Zero) plus **Local shore / EnterFace Workbench** (symbiote · studio · no NW chat pipe).
+Private coordination Pages bundle · **not advertised** on public KaiRis shores.
 
-- **Not linked** from public EnterFace / NOW:WON shores.
-- **Gate:** Family Door phrase · see `js/post-office-access-v0.json` (hashes only).
-- **Source of truth in monorepo:** `KaiRis-Active/website/nnowwonn-shore/` · sync via `processes/scripts/sync-kairis-post-office-repo.mjs`.
+- **Source of truth:** `KaiRis-Active/website/nnowwonn-shore/` · sync `processes/scripts/sync-kairis-post-office-repo.mjs`.
+- **Discovery:** Family Door runbook on HOST only (`processes/2026-10-20_Family-Door_POST-OFFICE-Discovery_HOST-ONLY_v0.md`).
+- **Gate hashes:** `js/post-office-access-v0.json` · phrases never in git.
 
-## GitHub Pages URL (after enable)
-
-`https://<user>.github.io/kairis-post-office/post-office.html`
-
-Or root → `index.html` redirects to `post-office.html`.
-
-## Gate setup
+## Gate setup (maintainers)
 
 ```bash
 POST_OFFICE_GATE_SECRET='…' node scripts/set-post-office-gate-hash.mjs
-git add js/post-office-access-v0.json && git commit -m "Set post office gate hash"
+git add js/post-office-access-v0.json && git commit -m "Set gate hash"
 ```
 
-Optional coordination: `PORTABLERI_POST_OFFICE_GATE_SECRET` on HOST · `POST /v1/post-office/gate-exchange`.
-
-**POSTMASTER GENERAL:** HestiaLethe · AMOR · PAX
+AMOR · PAX

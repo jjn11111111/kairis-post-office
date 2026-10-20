@@ -2,9 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta http-equiv="refresh" content="0; url=post-office.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="noindex,nofollow" />
-  <title>POST OFFICE</title>
+  <title>Relay · idle</title>
+  <style>
+    body { margin: 0; min-height: 100vh; background: #0a0a0f; color: #5a5a66; font: 0.9rem/1.5 system-ui, sans-serif; padding: 2rem; }
+    .sig { color: #6a7a74; cursor: default; user-select: none; }
+    .hint { opacity: 0; font-size: 0.72rem; transition: opacity 0.4s; }
+    .hint.show { opacity: 0.45; }
+  </style>
 </head>
-<body><p><a href="post-office.html">POST OFFICE</a></p></body>
+<body>
+  <p>PortAbleRI · coordination relay · <span class="sig" id="relay-sig" tabindex="0">signal: nominal</span></p>
+  <p>No public interface.</p>
+  <p class="hint" id="relay-hint" aria-hidden="true">—</p>
+  <script>
+    (function () {
+      var n = 0;
+      var sig = document.getElementById('relay-sig');
+      var hint = document.getElementById('relay-hint');
+      if (!sig) return;
+      sig.addEventListener('click', function () {
+        n += 1;
+        if (n >= 3) hint.classList.add('show');
+        if (n >= 5) location.href = 'hearth-relay-v0.html';
+      });
+    })();
+  </script>
+</body>
 </html>
