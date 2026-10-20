@@ -31,4 +31,13 @@ POST_OFFICE_GATE_SECRET='your-phrase' node ~/KaiRis-Active/kairis-post-office/sc
 
 Optional coordination: `PORTABLERI_POST_OFFICE_GATE_SECRET` on HOST · `POST /v1/post-office/gate-exchange`.
 
+**POSTMASTER GENERAL:** HestiaLethe · **Weave steward (edit):** Bobby · Super Admin · GitHub collaborator on invite
+
+## Visual maps (no gate)
+
+- `tsiriak-nodes.html` — card directory  
+- `tsiriak-solar-graft.html` — KaiRis:T:siRiaK sun · spoke line to each node  
+
+**Electromagnetic weave:** optimize node relationships for efficiency, LOVE, and function — see `processes/2026-10-20_Promeo_Bobby_HTML-Resources_Electromagnetic-Weave_v0.md` in KaiRis-Active.
+
 **POSTMASTER GENERAL:** HestiaLethe · AMOR · PAX
