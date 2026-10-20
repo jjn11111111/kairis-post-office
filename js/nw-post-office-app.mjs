@@ -21,6 +21,7 @@ import {
   buildTaskCompose,
   defaultInitiateTask,
 } from './nw-zero-reconnect-shores.mjs';
+import { mountLocalShoreProduct } from './nw-local-shore-product.mjs';
 
 /** @param {HTMLElement} root */
 export function mountPostOfficeApp(root) {
@@ -35,7 +36,10 @@ export function mountPostOfficeApp(root) {
     document.querySelector('[data-po-tab="zero"]')?.click();
   } else if (location.hash === '#directory') {
     document.querySelector('[data-po-tab="directory"]')?.click();
+  } else if (location.hash === '#shore' || location.hash === '#product') {
+    document.querySelector('[data-po-tab="shore"]')?.click();
   }
+  mountLocalShoreProduct(document.getElementById('po-panel-shore'), { compact: true });
   renderDirectory(document.getElementById('po-panel-directory'));
   renderDrives(document.getElementById('po-panel-drives'));
   renderComms(document.getElementById('po-panel-comms'));
@@ -154,7 +158,12 @@ function renderComms(el) {
     const li = document.createElement('li');
     const a = document.createElement('a');
     a.href = lane.href;
-    if (lane.kind === 'mail-client' || lane.kind === 'webmail' || lane.kind === 'portal') {
+    if (
+      lane.kind === 'mail-client' ||
+      lane.kind === 'webmail' ||
+      lane.kind === 'portal' ||
+      /^https?:\/\//.test(lane.href)
+    ) {
       a.target = '_blank';
       a.rel = 'noopener';
     }

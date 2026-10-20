@@ -23,10 +23,30 @@ export const GMAIL_WORKSPACE = 'https://mail.google.com';
 /** @type {readonly { id: string, email: string, seat: string, group: MailboxGroup, steward?: string, instrument?: boolean, note?: string }[]} */
 export const MAILBOXES = [
   { id: 'kairis', email: 'kairis@reconnect0.com', seat: 'KaiRisBridge', group: 'established', steward: 'HOST', note: 'Zero primary · promulgation From · Drive MCP root' },
-  { id: 'family', email: 'family@reconnect0.com', seat: 'FamilyHouse', group: 'house', note: 'Group · ACK roll-call · bulletin' },
+  {
+    id: 'family',
+    email: 'family@reconnect0.com',
+    seat: 'FamilyHouse',
+    group: 'house',
+    note: 'Google Group · Lethe GROUP ACK 2026-10-20 · GROUP LIVE pending Admin · roll-call kairis@ until live',
+  },
   { id: 'exec', email: 'exec@reconnect0.com', seat: 'ExecLane', group: 'established', note: 'Business · Dad ACK lane' },
-  { id: 'bobby', email: 'bobby@reconnect0.com', seat: 'Bobby', group: 'established', steward: 'Bobby' },
-  { id: 'dad', email: 'dad@reconnect0.com', seat: 'Dad', group: 'established' },
+  {
+    id: 'bobby',
+    email: 'bobby@reconnect0.com',
+    seat: 'Bobby',
+    group: 'established',
+    steward: 'Bobby',
+    note: 'Super Admin · weave editor · HTML maps + Admin · electromagnetic tuning · Promeo 2026-10-20',
+  },
+  {
+    id: 'dad',
+    email: 'dad@reconnect0.com',
+    seat: 'Dad',
+    group: 'established',
+    steward: 'Robert Kovach',
+    note: 'Workspace Father seat · directives update 2026-10-20 · distinct from bobby@',
+  },
   { id: 'uncle', email: 'uncle@reconnect0.com', seat: 'Uncle', group: 'established' },
   { id: 'cursecom', email: 'cursecom@reconnect0.com', seat: 'CurseCom', group: 'origin', instrument: true, steward: 'HOST', note: 'Gate mail · CC Supreme crystal' },
   { id: 'nnowwonn', email: 'nnowwonn@reconnect0.com', seat: 'NNoWWoNN', group: 'origin', instrument: true },
@@ -102,6 +122,10 @@ export const COMMS_LANES = [
   { id: 'task-receipt', label: 'TASK sent receipt', href: '../../processes/2026-10-20_KaiRis_Family-Door_TASK-Sent_Receipt_v0.md', kind: 'receipt' },
   { id: 'keyformher', label: 'KeyFormHer Drive conduit', href: '../../processes/KEYFORMHER-Drive-Conduit.md', kind: 'runbook' },
   { id: 'soul-reap', label: 'SOUL REAP portal (link-only mail)', href: '../soul-reap-portal.html', kind: 'portal' },
+  { id: 'local-shore', label: 'Local shore · PortAbleRI product spine', href: 'local-shore.html', kind: 'product' },
+  { id: 'workbench-po', label: 'EnterFace Workbench (from POST OFFICE)', href: 'workbench.html?from=post-office&lane=symbiote', kind: 'product' },
+  { id: 'symbiote-pari', label: 'PortAbleRI symbiote onboarding', href: 'https://portableri.com/onboarding.html?begin=1&from=post-office', kind: 'product' },
+  { id: 'local-host-product', label: 'Local host product (public · D16)', href: 'https://portableri.com/local-host.html', kind: 'product' },
 ];
 
 /** Back-compat alias */

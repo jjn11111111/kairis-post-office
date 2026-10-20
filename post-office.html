@@ -44,6 +44,10 @@
   <div id="post-office-app" class="hypercube-lane-shell post-office-shell" hidden>
     <header class="hypercube-lane-head post-office-head">
       <span>POST OFFICE · <span id="post-office-ace-label">—</span></span>
+      <nav class="post-office-head-nav" aria-label="Product lanes">
+        <a href="local-shore.html">Local shore</a>
+        <a href="workbench.html?from=post-office&amp;lane=symbiote">Workbench</a>
+      </nav>
       <button type="button" class="btn btn-ghost btn-small" id="post-office-lock">Lock</button>
     </header>
 
@@ -54,6 +58,7 @@
 
     <nav class="post-office-tabs" aria-label="POST OFFICE sections">
       <button type="button" class="post-office-tab is-active" data-po-tab="zero">Zero promulgation</button>
+      <button type="button" class="post-office-tab" data-po-tab="shore">Local shore · product</button>
       <button type="button" class="post-office-tab" data-po-tab="directory">Mailboxes</button>
       <button type="button" class="post-office-tab" data-po-tab="drives">Drives &amp; boxes</button>
       <button type="button" class="post-office-tab" data-po-tab="comms">Comms &amp; runbooks</button>
@@ -68,6 +73,10 @@
         </div>
       </div>
       <div id="po-panel-zero" class="zero-shore-grid"></div>
+    </section>
+
+    <section class="post-office-panel" data-po-panel="shore" hidden>
+      <div id="po-panel-shore"></div>
     </section>
 
     <section class="post-office-panel" data-po-panel="directory" hidden>

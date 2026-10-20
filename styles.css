@@ -1971,7 +1971,85 @@ body.page-post-office {
   margin: 0 auto;
 }
 .post-office-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 0.75rem;
+}
+.post-office-head-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-left: auto;
+  font-size: 0.78rem;
+}
+.post-office-head-nav a {
+  color: var(--teal);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.local-shore-page {
+  padding: 0 0 2rem;
+}
+.local-shore-intro .local-shore-lead {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.72);
+  max-width: 42rem;
+}
+.local-shore-diagram {
+  font-size: 0.68rem;
+  line-height: 1.45;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px dashed rgba(2, 195, 154, 0.28);
+  background: rgba(0, 0, 0, 0.35);
+  color: rgba(255, 255, 255, 0.55);
+  overflow-x: auto;
+  max-width: 42rem;
+}
+.local-shore-witness {
+  max-width: 42rem;
+  margin-top: 0.75rem;
+}
+.local-shore-actions {
+  margin-top: 1rem;
+  padding: 0 1.25rem;
+}
+.local-shore-grid {
+  padding: 0 1.25rem;
+}
+.local-shore-market {
+  padding: 0 1.25rem 1rem;
+  max-width: 44rem;
+}
+.local-shore-outcomes {
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.72);
+  padding-left: 1.1rem;
+  margin: 0.75rem 0;
+}
+.local-shore-outcomes li {
+  margin-bottom: 0.5rem;
+}
+.post-office-product-banner {
+  margin: 0 1.25rem 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(2, 195, 154, 0.35);
+  background: rgba(2, 195, 154, 0.06);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.78);
+}
+.post-office-product-banner a {
+  color: var(--teal);
+}
+body.page-workbench .post-office-product-banner {
+  max-width: var(--wrap, 52rem);
+  margin: 0.75rem auto 0;
+  padding: 0.75rem 1rem;
 }
 .post-office-tabs {
   display: flex;

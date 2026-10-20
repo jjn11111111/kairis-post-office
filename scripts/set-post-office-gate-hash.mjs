@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
  * Write SHA-256 gate fingerprints into post-office-access-v0.json (never the plaintext secret).
- * Usage (from repo root kairis-post-office/):
- *   POST_OFFICE_GATE_SECRET='…' node scripts/set-post-office-gate-hash.mjs
- *   POST_OFFICE_GATE_SECRET='…' ./set-gate-hash.sh
+ * Usage:
+ *   POST_OFFICE_GATE_SECRET='…' node processes/scripts/set-post-office-gate-hash.mjs
+ *   POST_OFFICE_STEWARD_GATE_SECRET='…' node processes/scripts/set-post-office-gate-hash.mjs
  */
 import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
