@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Isabella Hofsdal · Natal Profile · Ecliptic Sphere</title>
+  <style>
+    :root {
+      --bg: #0a0c12;
+      --panel: rgba(18, 22, 34, 0.92);
+      --text: #e8eaf0;
+      --muted: #9aa3b5;
+      --gold: #d4af6a;
+      --accent: #7eb8da;
+      --fire: #e07a5f;
+      --earth: #81b29a;
+      --air: #a8dadc;
+      --water: #6a8caf;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      background: radial-gradient(ellipse 120% 80% at 50% -20%, #1a2240 0%, var(--bg) 55%);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    header {
+      padding: 2rem 1.5rem 1rem;
+      max-width: 960px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    header h1 {
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      margin: 0 0 0.35rem;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+    }
+    header .meta { color: var(--muted); font-size: 0.95rem; }
+    header .meta strong { color: var(--gold); font-weight: 600; }
+    header .gift {
+      margin: 1.1rem auto 0;
+      max-width: 36rem;
+      padding: 0.85rem 1.1rem;
+      border-radius: 10px;
+      border: 1px solid rgba(212, 175, 106, 0.35);
+      background: rgba(212, 175, 106, 0.08);
+      color: var(--text);
+      font-size: 0.98rem;
+      line-height: 1.6;
+      text-align: left;
+    }
+    header .gift em { color: var(--gold); font-style: normal; font-weight: 600; }
+    header .gift .from { display: block; margin-top: 0.65rem; font-size: 0.88rem; color: var(--muted); text-align: right; }
+    .credit-note {
+      font-size: 0.82rem;
+      color: var(--muted);
+      border-left: 3px solid var(--gold);
+      padding: 0.5rem 0 0.5rem 0.85rem;
+      margin: 0.75rem 0;
+    }
+    .credit-note strong { color: var(--accent); font-weight: 600; }
+    main { max-width: 960px; margin: 0 auto; padding: 0 1.5rem 3rem; }
+    section {
+      background: var(--panel);
+      border: 1px solid rgba(212, 175, 106, 0.22);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    section h2 {
+      margin: 0 0 0.75rem;
+      font-size: 1.15rem;
+      color: var(--gold);
+      font-weight: 600;
+    }
+    section h3 {
+      margin: 1rem 0 0.4rem;
+      font-size: 1rem;
+      color: var(--accent);
+    }
+    p { margin: 0.5rem 0; }
+    ul { margin: 0.4rem 0; padding-left: 1.2rem; }
+    .sphere-wrap {
+      touch-action: manipulation;
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1;
+      max-height: min(72vh, 640px);
+      border-radius: 12px;
+      overflow: hidden;
+      /* Fallback if WebGL clear fails; 3D scene uses its own clear color */
+      background: #3d4f6a;
+      border: 1px solid rgba(126, 184, 218, 0.25);
+    }
+    .sphere-wrap[data-display="cinema"] { background: #050608; }
+    .sphere-wrap[data-display="bright"] { background: #2a3548; }
+    .display-toggle {
+      position: absolute;
+      top: 0.65rem;
+      right: 0.65rem;
+      z-index: 2;
+      font-size: 0.72rem;
+      font-family: system-ui, sans-serif;
+      padding: 0.35rem 0.55rem;
+      border-radius: 6px;
+      border: 1px solid rgba(212, 175, 106, 0.45);
+      background: rgba(10, 12, 18, 0.85);
+      color: var(--gold);
+      cursor: pointer;
+    }
+    .display-toggle:hover { background: rgba(30, 36, 52, 0.95); }
+    #sphere-canvas { width: 100%; height: 100%; display: block; }
+    .sphere-hud {
+      position: absolute;
+      left: 0.75rem;
+      bottom: 0.75rem;
+      font-size: 0.72rem;
+      color: var(--muted);
+      pointer-events: none;
+      line-height: 1.35;
+    }
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      margin-top: 0.75rem;
+      font-size: 0.8rem;
+    }
+    .legend span { display: inline-flex; align-items: center; gap: 0.35rem; }
+    .dot {
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    th, td {
+      text-align: left;
+      padding: 0.35rem 0.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    th { color: var(--muted); font-weight: 500; }
+    .timeline { font-size: 0.88rem; }
+    .timeline dt { color: var(--gold); font-weight: 600; margin-top: 0.65rem; }
+    .timeline dd { margin: 0.15rem 0 0 0; color: var(--text); }
+    .sandbox-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.75rem;
+      align-items: center;
+      margin: 0.75rem 0 0;
+      font-size: 0.78rem;
+      font-family: system-ui, sans-serif;
+    }
+    .sandbox-bar label { color: var(--muted); display: flex; align-items: center; gap: 0.35rem; }
+    .sandbox-bar button {
+      font-size: 0.72rem;
+      padding: 0.3rem 0.55rem;
+      border-radius: 6px;
+      border: 1px solid rgba(126, 184, 218, 0.4);
+      background: rgba(20, 28, 46, 0.9);
+      color: var(--accent);
+      cursor: pointer;
+    }
+    .sandbox-bar button:hover { background: rgba(40, 52, 78, 0.95); }
+    .aspect-panel {
+      margin-top: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      background: rgba(8, 12, 22, 0.65);
+      border: 1px solid rgba(126, 184, 218, 0.2);
+      font-size: 0.8rem;
+      font-family: system-ui, sans-serif;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+    .aspect-panel h4 { margin: 0 0 0.5rem; color: var(--gold); font-size: 0.85rem; }
+    .aspect-row { padding: 0.2rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .aspect-row strong { color: var(--text); }
+    .aspect-harm { color: #81b29a; }
+    .aspect-hard { color: #e07a5f; }
+    .aspect-mirror { color: #d4af6a; }
+    .dynamic-panel {
+      margin-top: 0.75rem;
+      padding: 0.85rem 1rem;
+      border-radius: 8px;
+      border: 1px solid rgba(212, 175, 106, 0.28);
+      background: rgba(0, 0, 0, 0.2);
+      font-size: 0.82rem;
+    }
+    .dynamic-panel h4 { margin: 0 0 0.5rem; color: var(--gold); font-size: 0.85rem; }
+    .dynamic-row { padding: 0.45rem 0; border-bottom: 1px solid rgba(255,255,255,0.06); line-height: 1.45; }
+    .dynamic-row:last-child { border-bottom: none; }
+    .tag {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-family: system-ui, sans-serif;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.12rem 0.4rem;
+      border-radius: 4px;
+      margin-right: 0.35rem;
+      vertical-align: middle;
+    }
+    .tag-mirror { background: rgba(212, 175, 106, 0.25); color: var(--gold); }
+    .tag-bound { background: rgba(224, 122, 95, 0.2); color: #e07a5f; }
+    .tag-ease { background: rgba(129, 178, 154, 0.2); color: #81b29a; }
+    .tag-couple { background: rgba(126, 184, 218, 0.2); color: var(--accent); }
+    .tag-emotional { border: 1px solid rgba(224, 122, 95, 0.35); color: #e8b4a8; }
+    .tag-functional { border: 1px solid rgba(129, 178, 154, 0.35); color: #a8d4bc; }
+    .sandbox-bar button.active { background: rgba(212, 175, 106, 0.35); color: #fff; }
+    .analysis details { margin: 0.65rem 0; }
+    .analysis summary {
+      cursor: pointer;
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .analysis details[open] summary { margin-bottom: 0.5rem; }
+    footer {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 1.5rem 2rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-align: center;
+    }
+    @media print {
+      .sphere-wrap {
+      touch-action: manipulation; break-inside: avoid; max-height: 420px; }
+      body { background: #fff; color: #111; }
+      section { border-color: #ccc; background: #fafafa; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="meta" style="margin:0 0 0.5rem; font-size:0.82rem; letter-spacing:0.06em; text-transform:uppercase;">A gift for Bella</p>
+    <h1>Isabella Hofsdal</h1>
+    <p class="meta">
+      <strong>Natal chart</strong> · 5 April 2001, 12:13 am PDT · Reno, NV (39°N31′, 119°W48′)<br />
+      Placidus · AstroGraph / TimePassages longitudes · sphere = ecliptic λ on unit shell (β = 0°)
+    </p>
+    <div class="gift">
+      Bella — this is yours: your sky on a sphere you can turn in your hands, and words that try to honor who you already are. The Center 6 view compares how your real life-centers align, mirror, and depend on each other — chart data from AstroGraph; the love and the frame are from family. Wonder, argument, or quiet — not a box.
+      <span class="from">With love · Jeremy · October 2026</span>
+    </div>
+  </header>
+
+  <main>
+    <section id="sphere">
+      <h2>Center 6 · natal alignment wheel</h2>
+      <p>The <strong>six gold-ringed hubs</strong> sit on your <em>natal</em> centroids (fixed to the chart). Chords show hub-to-hub geometry; click a hub to <strong>focus</strong> its contrasts, <strong>Shift+click</strong> a second hub to <strong>compare a pair</strong>. Filters highlight <strong>mirrors</strong> (180°), <strong>bound</strong> (square/opposition), or <strong>ease</strong> (sextile/trine). <strong>Profection</strong> marks the year’s emphasized hub (Jeremy · Center 6 frame).</p>
+      <div class="sphere-wrap" id="sphere-wrap" data-display="bright">
+        <button type="button" class="display-toggle" id="display-toggle" title="Cycle background contrast">Display: Bright</button>
+        <canvas id="natal-chart-canvas" aria-label="Natal ecliptic wheel with Center 6 hubs"></canvas>
+        <div class="sphere-hud" id="sphere-hud">Click a <strong style="color:#d4af6a">gold hub</strong> to focus · Shift+click to compare · drag empty space to rotate · scroll to zoom</div>
+        
+        
+      </div>
+      <p style="font-size:0.78rem;color:var(--muted);margin:0.5rem 0 0;font-family:system-ui,sans-serif;"><strong>Gift file for Bella:</strong> build <code style="color:var(--accent)">Isabella-Hofsdal_Natal-Center6.html</code> via <code>python3 publish/build_bella_universal_html.py</code> — works Safari/mobile/file:// (no 3D).</p>
+      <div class="legend" id="planet-legend"></div>
+      <div class="sandbox-bar">
+        <button type="button" id="toggle-mode">Mode: Center 6</button>
+        <button type="button" id="filter-all" class="active">Show: All</button>
+        <button type="button" id="filter-mirror">Mirrors</button>
+        <button type="button" id="filter-bound">Bound</button>
+        <button type="button" id="filter-ease">Ease</button>
+        <button type="button" id="clear-focus">Clear focus</button>
+        <label>Profection age <input type="range" id="age-slider" min="24" max="34" value="25" /> <span id="age-val">25</span></label>
+        <span id="profection-caption" style="color:var(--muted);flex:1 1 12rem;"></span>
+        <label>Orb <input type="range" id="orb-slider" min="2" max="10" value="5" /> <span id="orb-val">5°</span></label>
+      </div>
+      <div class="aspect-panel" id="aspect-panel">
+        <h4 id="aspect-panel-title">Center 6 · natal hub geometry</h4>
+        <div id="aspect-list"></div>
+      </div>
+      <div class="dynamic-panel" id="dynamic-panel">
+        <h4 id="dynamic-panel-title">Comparison · mirrors &amp; energetic dynamics</h4>
+        <p id="dynamic-intro" style="margin:0 0 0.5rem;color:var(--muted);font-size:0.78rem;">Click a hub to see how that life-center couples, mirrors, or depends on the others. Pairs are read from natal centroids only.</p>
+        <div id="dynamic-list"></div>
+      </div>
+      <details open class="credit-note" style="margin-top:1rem;border-left-color:var(--accent);">
+        <summary style="cursor:pointer;color:var(--accent);font-weight:600;">How to read the sandbox (aligned function)</summary>
+        <p><strong>Hubs are centroids</strong> — each gold ring is the vector-mean longitude of its member bodies (e.g. Hearth = Sun + Venus). That is the chart’s <em>functional summary</em> of that life area, not a movable guess.</p>
+        <p><strong>Mirrored alignment</strong> — hubs ~180° apart face each other across the wheel (Voice ↔ Public in your map). They often describe two sides of one story: inner process vs outer role, private vs visible.</p>
+        <p><strong>Bound energy</strong> — squares and oppositions mark departments that <em>require</em> each other to evolve (Hearth ↔ Bond: home fire and soul-partnership). Tension here is relational glue when honored, not “bad luck.”</p>
+        <p><strong>Ease</strong> — sextiles and trines show natural backup (Belief → Bond: feeling-mind supports the nodal bond path).</p>
+        <p><strong>White center dot</strong> — balance point of all six hubs (~Leo in your natal map): where the whole system leans when every department gets equal weight. Contrast with the full-chart centroid (~Pisces): private myth vs integrated heart-forward stance.</p>
+        <p><strong>Profection slider</strong> — which hub is <em>timed</em> for the birthday year; use focus/compare to see how that year’s theme sits against mirrors and bound pairs.</p>
+      </details>
+    </section>
+
+    <section>
+      <h2>Positions on the shell (λ → x, y, z)</h2>
+      <table id="pos-table">
+        <thead><tr><th>Body</th><th>Sign°</th><th>λ</th><th>x</th><th>y</th><th>z</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Center 6 hub centroids (natal · fixed)</h2>
+      <table id="centroid-table">
+        <thead><tr><th>Hub</th><th>λ</th><th>≈ Sign</th><th>Members</th></tr></thead>
+        <tbody id="hub-table-body"></tbody>
+      </table>
+    </section>
+
+    <section class="analysis">
+      <h2>Full profile · synthesis (AstroGraph + extended reading)</h2>
+      <p><em>Original synthesis for Isabella — not a substitute for licensed TimePassages reports. Chart data: AstroGraph natal, 5 Apr 2001, 12:13 PDT, Reno.</em></p>
+
+      <details open>
+        <summary>Pattern lane · first read</summary>
+        <p><strong>World view:</strong> Sagittarius rising — quest, humor, moral straight talk. <strong>Core drive:</strong> Sun Aries 4th — identity wired through home and what she’ll fight for privately. <strong>Emotional metabolism:</strong> Moon Virgo 9th — feelings become ideas, ethics, “what’s true?” <strong>Relationship signature:</strong> Gemini 7th — mental affair with the soul; boredom reads as abandonment. <strong>Rare stack:</strong> Fire on angles + Aries 4th stellium = visible courage with private fuel. <strong>Growth edge:</strong> mutable overload — choose one truth long enough to build.</p>
+      </details>
+
+      <details>
+        <summary>Natal architecture (houses &amp; rulers)</summary>
+        <p><strong>Asc Sag · MC Libra</strong> — public grace, diplomacy, beauty; career ruled by <strong>Venus Rx 4th</strong> (roots before résumé). <strong>4th cluster:</strong> Sun (exalted), Venus Rx, Vesta, Juno, Eris — hearth is sacred, contractual, disruptive. <strong>1st cluster:</strong> Mars, Pluto Rx, Chiron, Pallas, Nessus — visible will, wound, strategy. <strong>6th:</strong> Jupiter Gemini + Saturn Taurus — monastery of craft; Saturn trine MC. <strong>2nd:</strong> Uranus/Neptune Aquarius — visionary, unstable values; Lilith equality in money. <strong>NN Cancer 7th / SN Cap 1st</strong> — partnership nurture vs. solo achiever habit. <strong>Vertex &amp; Lot of Fortune 8th</strong> — fate and luck through merge and transformation.</p>
+      </details>
+
+      <details>
+        <summary>Strong aspects · storyline I (Phoenix)</summary>
+        <p>Sun trine Pluto (0.4°), Sun trine Asc, Pluto conjunct Asc (1.6°), Sun trine Pallas, Pluto conjunct Pallas — regeneration on the persona; champion underdog; shadow: intensity, ego when insecure. Vesta trine Asc: devotion visible. Mars conjunct Pluto + Chiron: passive-aggressive OR healer-warrior — conscious anger decides. Fire trine engine: Sun/Venus Aries — Mars/Pluto/Chiron Sag — recovery fast when home is honest.</p>
+      </details>
+
+      <details>
+        <summary>Strong aspects · storyline II (Skipped-step Sun)</summary>
+        <p>Sun square North Node (5°) — identity mission not easy; discover who you are at base. Sun conjunct Eris/Vesta; square Nessus/Ceres — soul-aligned fights; trust/nurture wounds. Sun inconjunct Makemake (0.4°); Moon conjunct Makemake — activism and natural law as feeling. Sun semi-square Saturn — love vs. recognition. Sun conjunct Venus (9.7°) — charm fused with selfhood at the root.</p>
+      </details>
+
+      <details>
+        <summary>Strong aspects · storyline III (Mind &amp; MC)</summary>
+        <p>Mercury sextile Saturn (exact) — profound structured mind. Mercury square Chiron (0.6°) — communication wound/healing; sibling/speech themes. Mercury opposite MC — public wants clarity; Mercury Pisces 3rd wants poetry — editor, therapist, artist of form. Moon conjunct Chariklo (2.3°) — blind seer in 9th; Moon square Jupiter (1.4°) — optimism, overspend, overpromise. Moon trine/sextile nodes — visceral drive toward nurture and home base.</p>
+      </details>
+
+      <details>
+        <summary>Haumea · Venus · public ethics</summary>
+        <p>Venus opposite Haumea (1.6°); Haumea conjunct MC (5.1°); Venus opposite MC — love renegotiated against natural law in career. Jupiter trine Neptune (0.1°) trine Haumea — faith, art, generosity; Neptune square Pholus — groups/opening the “cask” risk. Venus sextile Jupiter/Neptune — romantic idealism; ground via 6th-house Saturn.</p>
+      </details>
+
+      <details>
+        <summary>Centaurs &amp; asteroids</summary>
+        <p><strong>Pallas</strong> conj Asc/Pluto — strategic fire. <strong>Juno</strong> 4th Aries — boundaries in partnership at home. <strong>Pholus</strong> 11th Rx — friend-group trigger events. <strong>Nessus</strong> 1st + SN — poison/revenge theme on identity; NN opp Nessus — grow through clean trust. <strong>Ceres–Nessus</strong> — nurture vs. harm cycles. <strong>Eris</strong> 4th — iconoclasm at home; Mars trine Eris — fight from core values. <strong>Makemake</strong> square Asc — environmental moral compass on the body.</p>
+      </details>
+
+      <details>
+        <summary>Night chart · sect · Sabian highlights</summary>
+        <p>Night birth: Moon &amp; Venus in sect; Sun/Mars out of sect — feelings and bonding as reliable instruments. Sun exalted 4th; Venus Rx detriment under Sun’s beams — love learned backward. Sun Aries 16 — nature spirits at sunset (thin veil at home). Moon Virgo 7 — complexity of service and desire. MC Libra 3 — public built one fair decision at a time.</p>
+      </details>
+
+      <details>
+        <summary>Centroids on the sphere</summary>
+        <p>Whole chart ≈ 17° Pisces; personal pentad ≈ 22° Pisces; Sag cluster ≈ 20° Sag; Sun–Venus ≈ 11° Aries; Sun–Moon balance ≈ 26° Gemini. Global pull = private myth + identity-at-home; Sag cluster = visible arrow; Gemini midpoint = mind/belief axis.</p>
+      </details>
+
+      <details>
+        <summary>Transits · late Oct 2026 (ephemeris sketch)</summary>
+        <p><strong>Act I:</strong> Saturn + Neptune early Aries on 4th stellium — home/worth rebuilt and fogged. <strong>Act II:</strong> Uranus Gemini square Moon 9th — belief/work shake; conjunct natal Jupiter 6th. <strong>Act III:</strong> Mars/Jupiter Leo 8th trine Sag 1st — depth fuels confidence. <strong>Act IV:</strong> Sun Scorpio sextile MC — backstage work feeds reputation. <strong>Profection 25:</strong> Aries 5th, Mars lord — creative reboot year; aligns with Personal Year 1.</p>
+      </details>
+
+      <details>
+        <summary>Center 6 · six hubs · timeline</summary>
+        <div class="credit-note">
+          <strong>Center 6</strong> is a family reading frame — not an AstroGraph product. It names two layers: (1) the <em>natal 6th house</em> as the life “center of craft” (body, daily work, rhythm — here Jupiter + Saturn), and (2) <em>six aspect hubs</em> (Face, Hearth, Voice, Belief, Public, Bond) used to time themes through profection years. Context, naming, and integration for this profile: <strong>Jeremy (originator)</strong>; chart longitudes remain AstroGraph / TimePassages.
+        </div>
+        <p><strong>Natal 6th</strong> Jupiter + Saturn — mastery through routine. <strong>Hubs:</strong> (1) Face/will (2) Hearth (3) Voice (4) Belief (5) Public (6) Bond. <strong>Apr 2026–27</strong> age 25 PY1 5th Mars. <strong>Apr 2027–28</strong> age 26 PY2 <strong>6th Venus = Center 6 year</strong>. <strong>2028</strong> 7th Mercury. <strong>2029</strong> 8th Moon. <strong>2030–31</strong> Saturn return. <strong>2031</strong> 10th Mercury / Haumea MC harvest.</p>
+      </details>
+
+      <details open>
+        <summary>Integration · one paragraph</summary>
+        <p>Pluto rising with Sun trine Asc: honest intensity that transforms rooms. Sun exalted in the 4th: when home is true, she’s unstoppable; Venus Rx rewrites worth. Moon Virgo 9th makes her the philosopher who keeps notes; NN Cancer 7th calls her into partnership as spiritual engineering, not solo CEO. Center 6 says dreams become real through schedule and craft; the sandbox <em>compares</em> how hearth, bond, voice, and public face mirror and depend on each other in the natal map.</p>
+      </details>
+    </section>
+  </main>
+
+  <footer>
+    Prepared October 2026 · gift for Isabella Hofsdal · Jeremy · Center 6 system (concept &amp; context: Jeremy, originator) · Chart data: AstroGraph · universal · mirrors &amp; dynamics · Not medical, legal, or financial advice.
+  </footer>
+
+  
+<script>
+/**
+ * Local-file / Safari-safe natal wheel (no ES modules, no WebGL).
+ * Used when opening the HTML via file:// (double-click, AirDrop, Drive download).
+ */
+(function () {
+  const SIGNS = [
+    'Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo', 'Libra', 'Scorpio',
+    'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces',
+  ];
+
+  const BODIES = [
+    { name: 'Sun', sign: 'Aries', d: 15, m: 33, s: 59, color: '#ffcc66' },
+    { name: 'Moon', sign: 'Virgo', d: 6, m: 58, s: 25, color: '#dddddd' },
+    { name: 'Mercury', sign: 'Pisces', d: 28, m: 16, s: 13, color: '#88aa88' },
+    { name: 'Venus', sign: 'Aries', d: 5, m: 50, s: 3, color: '#eeaa88' },
+    { name: 'Mars', sign: 'Sagittarius', d: 22, m: 11, s: 6, color: '#cc4444' },
+    { name: 'Jupiter', sign: 'Gemini', d: 8, m: 22, s: 58, color: '#cc88ff' },
+    { name: 'Saturn', sign: 'Taurus', d: 28, m: 14, s: 1, color: '#aa9977' },
+    { name: 'Uranus', sign: 'Aquarius', d: 23, m: 40, s: 26, color: '#66ddcc' },
+    { name: 'Neptune', sign: 'Aquarius', d: 8, m: 25, s: 54, color: '#6688cc' },
+    { name: 'Pluto', sign: 'Sagittarius', d: 15, m: 11, s: 15, color: '#886644' },
+    { name: 'North Node', sign: 'Cancer', d: 10, m: 32, s: 32, color: '#d4af6a' },
+    { name: 'Chiron', sign: 'Sagittarius', d: 28, m: 55, s: 9, color: '#99bb99' },
+    { name: 'Asc', sign: 'Sagittarius', d: 13, m: 33, s: 49, color: '#ffffff' },
+    { name: 'MC', sign: 'Libra', d: 2, m: 17, s: 0, color: '#ffffff' },
+  ];
+
+  const CENTER6_HUBS = [
+    { id: 1, label: '1 · Face / will', members: ['Mars', 'Pluto', 'Chiron', 'Asc'], color: '#e07a5f' },
+    { id: 2, label: '2 · Hearth', members: ['Sun', 'Venus'], color: '#ffcc66' },
+    { id: 3, label: '3 · Voice', members: ['Mercury'], color: '#81b29a' },
+    { id: 4, label: '4 · Belief', members: ['Moon'], color: '#c8d0dc' },
+    { id: 5, label: '5 · Public', members: ['MC'], color: '#7eb8da' },
+    { id: 6, label: '6 · Bond', members: ['North Node'], color: '#d4af6a' },
+  ];
+
+  const HUB_PAIR_DYNAMICS = {
+    '2-3': {
+      emotional: 'Heart and speech share one breath — what you love at home wants to be said immediately.',
+      functional: 'Sun–Venus and Mercury on one arc: identity-at-hearth exports through voice.',
+    },
+    '2-6': {
+      emotional: 'Square · emotionally interdependent — private fire and soul-bond pull on each other.',
+      functional: 'Partnership grows when home truth is honest, not when persona performs harmony.',
+    },
+    '3-5': {
+      emotional: 'Opposition · mirrored — inner voice vs diplomatic public face; both are real.',
+      functional: 'Career and message need translation — clarity in public without killing the mystery.',
+    },
+    '3-4': {
+      emotional: 'Near-opposition · belief-feeling and voice stare across the wheel.',
+      functional: 'Moon Virgo 9th and Mercury 3rd: teach what you feel after you have sorted it.',
+    },
+    '4-5': {
+      emotional: 'Conjunction-band · belief and reputation cohabit on your name.',
+      functional: 'Public role carries emotional ethics; reputation follows integrity.',
+    },
+    '4-6': {
+      emotional: 'Sextile · nurturing mind feeds the nodal bond path.',
+      functional: 'Partnership flourishes when beliefs are practical and service-minded.',
+    },
+    '1-2': {
+      emotional: 'Trine-band · Face and Hearth share fire when home is aligned.',
+      functional: 'Courage on the street when the 4th is honest.',
+    },
+    '1-5': {
+      emotional: 'Trine-band · persona and public image can harmonize.',
+      functional: 'Will (Face) expresses as fair, visible leadership when integrated.',
+    },
+    '2-5': {
+      emotional: 'Near-mirror · hearth fire vs public Libra — love-at-home vs image-in-world.',
+      functional: 'Public love-policy must match private worth work.',
+    },
+    '5-6': {
+      emotional: 'Square-band · public role and bond axis negotiate visibility vs belonging.',
+      functional: 'Partnerships test whether reputation serves connection or performance.',
+    },
+  };
+
+  const PROFECTION_BY_AGE = {
+    24: { house: '4th Pisces', hub: 2, note: 'Hearth · roots · inner life' },
+    25: { house: '5th Aries · Mars lord', hub: 2, note: 'Creative fire · visible heart' },
+    26: { house: '6th Taurus · Venus lord', hub: 2, note: 'Center 6 craft year · body · work · rhythm' },
+    27: { house: '7th Gemini · Mercury lord', hub: 6, note: 'Bond · contracts · partners' },
+    28: { house: '8th Cancer · Moon lord', hub: 6, note: 'Merge · shared depth · trust' },
+    29: { house: '9th Leo · Sun lord', hub: 4, note: 'Belief · travel · teaching' },
+    30: { house: '10th Virgo · Mercury lord', hub: 5, note: 'Public craft · Haumea MC themes' },
+    31: { house: '11th Libra · Venus lord', hub: 5, note: 'Allies · circles · fairness' },
+    32: { house: '12th Scorpio · Pluto lord', hub: 1, note: 'Shadow · retreat · inner work' },
+    33: { house: '1st Sag · Jupiter lord', hub: 1, note: 'Persona reset · Face' },
+    34: { house: '2nd Cap · Saturn lord', hub: 6, note: 'Values · resources · Bond to earth' },
+  };
+
+  const ASPECT_DEF = [
+    { ang: 0, name: 'conj', orb: 8, hard: false },
+    { ang: 60, name: 'sext', orb: 5, hard: false },
+    { ang: 90, name: 'sq', orb: 7, hard: true },
+    { ang: 120, name: 'tri', orb: 7, hard: false },
+    { ang: 180, name: 'opp', orb: 8, hard: true },
+  ];
+
+  function signIndex(s) {
+    return SIGNS.indexOf(s);
+  }
+  function lonDeg(b) {
+    return signIndex(b.sign) * 30 + b.d + b.m / 60 + b.s / 3600;
+  }
+  function centroidLon(lons) {
+    let x = 0;
+    let z = 0;
+    for (const l of lons) {
+      const r = (l * Math.PI) / 180;
+      x += Math.cos(r);
+      z += Math.sin(r);
+    }
+    return (((Math.atan2(z, x) * 180) / Math.PI) % 360 + 360) % 360;
+  }
+  function sigLabel(lon) {
+    const i = Math.floor((((lon % 360) + 360) % 360) / 30) % 12;
+    const deg = lon % 30;
+    return `${deg.toFixed(1)}° ${SIGNS[i]}`;
+  }
+  function sep(la, lb) {
+    let d = Math.abs(la - lb) % 360;
+    return Math.min(d, 360 - d);
+  }
+  function findAspect(la, lb, maxOrb) {
+    const s = sep(la, lb);
+    for (const a of ASPECT_DEF) {
+      const o = Math.abs(s - a.ang);
+      if (o <= Math.min(maxOrb, a.orb)) return { ...a, orb: o, sep: s, mirror: a.ang === 180 };
+    }
+    if (Math.abs(s - 180) <= Math.min(maxOrb, 5)) {
+      return { ang: 180, name: 'opp', orb: Math.abs(s - 180), sep: s, hard: true, mirror: true };
+    }
+    return null;
+  }
+  function aspectKind(asp) {
+    if (asp.mirror || asp.name === 'opp' || Math.abs(asp.sep - 180) <= 4) return 'mirror';
+    if (asp.name === 'sq' || (asp.hard && asp.name !== 'conj')) return 'bound';
+    if (asp.name === 'sext' || asp.name === 'tri') return 'ease';
+    if (asp.name === 'conj') return 'couple';
+    return 'other';
+  }
+  function pairKey(a, b) {
+    return a < b ? `${a}-${b}` : `${b}-${a}`;
+  }
+
+  function pickHub(id, shiftKey, focusHubId, compareHubId) {
+    if (shiftKey) {
+      if (focusHubId == null) return { focus: id, compare: null };
+      if (focusHubId !== id) return { focus: focusHubId, compare: id };
+      return { focus: focusHubId, compare: null };
+    }
+    if (focusHubId === id) return { focus: null, compare: null };
+    if (focusHubId != null && compareHubId == null && focusHubId !== id) {
+      return { focus: focusHubId, compare: id };
+    }
+    return { focus: id, compare: null };
+  }
+
+  window.BellaLocalWheel = {
+    init() {
+      const natalLon = Object.fromEntries(BODIES.map((b) => [b.name, lonDeg(b)]));
+      const hubLon = Object.fromEntries(
+        CENTER6_HUBS.map((h) => [h.id, centroidLon(h.members.map((n) => natalLon[n]))]),
+      );
+
+      let maxOrb = 5;
+      let aspectFilter = 'all';
+      let focusHubId = null;
+      let compareHubId = null;
+      let profectionAge = 25;
+      let sandboxMode = 'center6';
+
+      const canvas =
+        document.getElementById('natal-chart-canvas') ||
+        document.getElementById('sphere-fallback-2d') ||
+        document.getElementById('sphere-canvas');
+      const wrap = document.getElementById('sphere-wrap');
+      if (canvas) {
+        canvas.id = 'natal-chart-canvas';
+        canvas.style.display = 'block';
+        canvas.style.position = 'absolute';
+        canvas.style.inset = '0';
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        canvas.style.touchAction = 'manipulation';
+      }
+      document.getElementById('sphere-canvas')?.style.setProperty('display', 'none', 'important');
+
+      const hud = document.getElementById('sphere-hud');
+      if (hud) {
+        hud.innerHTML =
+          '<strong style="color:#d4af6a">Tap a numbered hub</strong> to focus · tap a second hub to compare · works offline in any browser';
+      }
+
+      function fillTables() {
+        const tbody = document.querySelector('#pos-table tbody');
+        if (tbody) {
+          tbody.innerHTML = '';
+          BODIES.forEach((b) => {
+            const lam = natalLon[b.name];
+            const r = (lam * Math.PI) / 180;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${b.name}</td><td>${sigLabel(lam)}</td><td>${lam.toFixed(2)}°</td><td>${Math.cos(r).toFixed(3)}</td><td>0.000</td><td>${Math.sin(r).toFixed(3)}</td>`;
+            tbody.appendChild(tr);
+          });
+        }
+        const hubBody = document.getElementById('hub-table-body');
+        if (hubBody) {
+          hubBody.innerHTML = '';
+          CENTER6_HUBS.forEach((h) => {
+            const lam = hubLon[h.id];
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${h.label}</td><td>${lam.toFixed(2)}°</td><td>${sigLabel(lam)}</td><td>${h.members.join(', ')}</td>`;
+            hubBody.appendChild(tr);
+          });
+        }
+        const legend = document.getElementById('planet-legend');
+        if (legend && !legend.dataset.filled) {
+          legend.dataset.filled = '1';
+          CENTER6_HUBS.forEach((h) => {
+            legend.innerHTML += `<span><i class="dot" style="background:${h.color}; box-shadow:0 0 0 2px #d4af6a"></i>${h.label}</span>`;
+          });
+          legend.innerHTML += '<span style="color:var(--muted)">· small dots = natal planets</span>';
+        }
+      }
+
+      function allHubAspects() {
+        const out = [];
+        for (let i = 0; i < CENTER6_HUBS.length; i++) {
+          for (let j = i + 1; j < CENTER6_HUBS.length; j++) {
+            const ha = CENTER6_HUBS[i];
+            const hb = CENTER6_HUBS[j];
+            const a = findAspect(hubLon[ha.id], hubLon[hb.id], maxOrb);
+            if (a) out.push({ a: ha.label, b: hb.label, aId: ha.id, bId: hb.id, ...a });
+          }
+        }
+        out.sort((x, y) => x.orb - y.orb);
+        return out;
+      }
+
+      function chordVisible(asp) {
+        if (compareHubId != null && focusHubId != null) {
+          const ids = new Set([asp.aId, asp.bId]);
+          if (!ids.has(focusHubId) || !ids.has(compareHubId)) return false;
+        } else if (focusHubId != null) {
+          if (asp.aId !== focusHubId && asp.bId !== focusHubId) return false;
+        }
+        if (aspectFilter === 'all') return true;
+        const k = aspectKind(asp);
+        if (aspectFilter === 'mirror') return k === 'mirror';
+        if (aspectFilter === 'bound') return k === 'bound' || k === 'mirror';
+        if (aspectFilter === 'ease') return k === 'ease' || k === 'couple';
+        return true;
+      }
+
+      function renderAspectPanel(aspects) {
+        const el = document.getElementById('aspect-list');
+        const title = document.getElementById('aspect-panel-title');
+        if (!el || !title) return;
+        title.textContent = 'Center 6 · natal hub geometry';
+        const visible = aspects.filter((a) => chordVisible(a));
+        if (!visible.length) {
+          el.innerHTML = '<p class="aspect-row">No aspects in this filter/focus within orb.</p>';
+          return;
+        }
+        el.innerHTML = visible
+          .slice(0, 36)
+          .map((asp) => {
+            const k = aspectKind(asp);
+            const tag =
+              k === 'mirror'
+                ? '<span class="tag tag-mirror">mirror</span>'
+                : k === 'bound'
+                  ? '<span class="tag tag-bound">bound</span>'
+                  : k === 'ease'
+                    ? '<span class="tag tag-ease">ease</span>'
+                    : k === 'couple'
+                      ? '<span class="tag tag-couple">coupled</span>'
+                      : '';
+            return `<div class="aspect-row ${asp.hard ? 'aspect-hard' : 'aspect-harm'}">${tag}<strong>${asp.a} ${asp.name} ${asp.b}</strong> · ${asp.sep.toFixed(1)}° (orb ${asp.orb.toFixed(2)}°)</div>`;
+          })
+          .join('');
+      }
+
+      function renderDynamics(aspects) {
+        const list = document.getElementById('dynamic-list');
+        const intro = document.getElementById('dynamic-intro');
+        if (!list || !intro) return;
+        let pairs = aspects.filter((a) => chordVisible(a));
+        intro.textContent =
+          'Tap a gold hub on the wheel to focus; Shift+tap a second hub to compare pairs.';
+        if (!pairs.length) {
+          list.innerHTML = '<p class="dynamic-row">No dynamics in current filter within orb.</p>';
+          return;
+        }
+        list.innerHTML = pairs
+          .map((asp) => {
+            const key = pairKey(asp.aId, asp.bId);
+            const dyn = HUB_PAIR_DYNAMICS[key];
+            const emotional =
+              dyn?.emotional ??
+              'These centers exchange pressure and support through this aspect.';
+            const functional =
+              dyn?.functional ?? 'Integration means honoring both hubs, not picking one as “real.”';
+            return `<div class="dynamic-row"><strong>${asp.a} ${asp.name} ${asp.b}</strong> · ${asp.sep.toFixed(1)}°<br /><span class="tag tag-emotional">feeling</span> ${emotional}<br /><span class="tag tag-functional">function</span> ${functional}</div>`;
+          })
+          .join('');
+      }
+
+      function pt(lam, cx, cy, R) {
+        const r = (lam * Math.PI) / 180;
+        return { x: cx + R * Math.cos(r), y: cy + R * Math.sin(r) };
+      }
+
+      function drawWheel() {
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const dpr = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        const w = Math.max(280, rect.width);
+        const h = Math.max(280, rect.height);
+        canvas.width = w * dpr;
+        canvas.height = h * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        const cx = w / 2;
+        const cy = h / 2;
+        const R = Math.min(w, h) * 0.42;
+        const bg =
+          wrap?.dataset.display === 'cinema'
+            ? '#050608'
+            : wrap?.dataset.display === 'standard'
+              ? '#141c2e'
+              : '#2a3548';
+        ctx.fillStyle = bg;
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.strokeStyle = 'rgba(197, 223, 245, 0.55)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(cx, cy, R, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(cx, cy, R * 0.72, 0, Math.PI * 2);
+        ctx.stroke();
+
+        const signShort = ['Ar', 'Ta', 'Ge', 'Ca', 'Le', 'Vi', 'Li', 'Sc', 'Sa', 'Cp', 'Aq', 'Pi'];
+        for (let i = 0; i < 12; i++) {
+          const mid = (i * 30 + 15) * (Math.PI / 180);
+          const lx = cx + (R + 14) * Math.cos(mid);
+          const ly = cy + (R + 14) * Math.sin(mid);
+          ctx.fillStyle = 'rgba(232,234,240,0.75)';
+          ctx.font = `${Math.max(9, R * 0.045)}px system-ui,sans-serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(signShort[i], lx, ly);
+          const a0 = (i * 30 * Math.PI) / 180;
+          const p0 = { x: cx + R * Math.cos(a0), y: cy + R * Math.sin(a0) };
+          ctx.beginPath();
+          ctx.moveTo(cx, cy);
+          ctx.lineTo(p0.x, p0.y);
+          ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+          ctx.stroke();
+        }
+
+        const aspects = allHubAspects().filter((a) => chordVisible(a));
+        for (const asp of aspects) {
+          const p1 = pt(hubLon[asp.aId], cx, cy, R * 0.88);
+          const p2 = pt(hubLon[asp.bId], cx, cy, R * 0.88);
+          const mirror = aspectKind(asp) === 'mirror';
+          ctx.strokeStyle = mirror ? 'rgba(212,175,106,0.9)' : asp.hard ? 'rgba(224,122,95,0.75)' : 'rgba(129,178,154,0.65)';
+          ctx.lineWidth = mirror ? 2.5 : 1.5;
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+        }
+
+        BODIES.forEach((b) => {
+          const p = pt(natalLon[b.name], cx, cy, R * 0.72);
+          ctx.fillStyle = b.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        const c6 = centroidLon(CENTER6_HUBS.map((h) => hubLon[h.id]));
+        const c6p = pt(c6, cx, cy, R * 0.55);
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(c6p.x, c6p.y, 5, 0, Math.PI * 2);
+        ctx.fill();
+
+        const prof = PROFECTION_BY_AGE[profectionAge];
+        CENTER6_HUBS.forEach((h) => {
+          const p = pt(hubLon[h.id], cx, cy, R * 0.88);
+          const focused = focusHubId === h.id;
+          const compared = compareHubId === h.id;
+          const dim = focusHubId != null && !focused && !compared;
+          const onProf = prof && prof.hub === h.id;
+          ctx.globalAlpha = dim ? 0.35 : 1;
+          ctx.strokeStyle = '#ffe08a';
+          ctx.lineWidth = onProf || focused || compared ? 3 : 2;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 14, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.fillStyle = h.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 9, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#fff';
+          ctx.font = '10px system-ui,sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(String(h.id), p.x, p.y + 3);
+          ctx.globalAlpha = 1;
+        });
+
+        renderAspectPanel(allHubAspects());
+        renderDynamics(allHubAspects());
+      }
+
+      function hubAt(ev) {
+        const rect = canvas.getBoundingClientRect();
+        const touch = ev.changedTouches?.[0];
+        const x = (touch ? touch.clientX : ev.clientX) - rect.left;
+        const y = (touch ? touch.clientY : ev.clientY) - rect.top;
+        const w = rect.width;
+        const h = rect.height;
+        const cx = w / 2;
+        const cy = h / 2;
+        const R = Math.min(w, h) * 0.42;
+        let best = null;
+        let bestD = Math.max(28, R * 0.12);
+        CENTER6_HUBS.forEach((hub) => {
+          const p = pt(hubLon[hub.id], cx, cy, R * 0.88);
+          const d = Math.hypot(p.x - x, p.y - y);
+          if (d < bestD) {
+            bestD = d;
+            best = hub.id;
+          }
+        });
+        return best;
+      }
+
+      function refresh() {
+        drawWheel();
+        const p = PROFECTION_BY_AGE[profectionAge];
+        const cap = document.getElementById('profection-caption');
+        if (cap) cap.textContent = p ? `${p.house} · hub ${p.hub} · ${p.note}` : '';
+      }
+
+      fillTables();
+      refresh();
+
+      function onHubPointer(ev) {
+        ev.preventDefault();
+        if (sandboxMode !== 'center6') return;
+        const id = hubAt(ev);
+        if (id == null) return;
+        const next = pickHub(id, ev.shiftKey, focusHubId, compareHubId);
+        focusHubId = next.focus;
+        compareHubId = next.compare;
+        refresh();
+      }
+      canvas.addEventListener('click', onHubPointer);
+      canvas.addEventListener('touchend', onHubPointer, { passive: false });
+
+      document.getElementById('orb-slider')?.addEventListener('input', (e) => {
+        maxOrb = Number(e.target.value);
+        document.getElementById('orb-val').textContent = `${maxOrb}°`;
+        refresh();
+      });
+
+      document.getElementById('age-slider')?.addEventListener('input', (e) => {
+        profectionAge = Number(e.target.value);
+        document.getElementById('age-val').textContent = String(profectionAge);
+        refresh();
+      });
+
+      const filterBtns = {
+        all: document.getElementById('filter-all'),
+        mirror: document.getElementById('filter-mirror'),
+        bound: document.getElementById('filter-bound'),
+        ease: document.getElementById('filter-ease'),
+      };
+      function setAspectFilter(next) {
+        aspectFilter = next;
+        Object.entries(filterBtns).forEach(([k, btn]) => btn?.classList.toggle('active', k === next));
+        refresh();
+      }
+      filterBtns.all?.addEventListener('click', () => setAspectFilter('all'));
+      filterBtns.mirror?.addEventListener('click', () => setAspectFilter('mirror'));
+      filterBtns.bound?.addEventListener('click', () => setAspectFilter('bound'));
+      filterBtns.ease?.addEventListener('click', () => setAspectFilter('ease'));
+      document.getElementById('clear-focus')?.addEventListener('click', () => {
+        focusHubId = null;
+        compareHubId = null;
+        refresh();
+      });
+
+      document.getElementById('toggle-mode')?.addEventListener('click', () => {
+        sandboxMode = sandboxMode === 'center6' ? 'planets' : 'center6';
+        document.getElementById('toggle-mode').textContent =
+          sandboxMode === 'center6' ? 'Mode: Center 6' : 'Mode: Planets';
+        refresh();
+      });
+
+      const modes = ['standard', 'bright', 'cinema'];
+      let modeIdx = 1;
+      document.getElementById('display-toggle')?.addEventListener('click', () => {
+        modeIdx = (modeIdx + 1) % modes.length;
+        const mode = modes[modeIdx];
+        if (wrap) wrap.dataset.display = mode;
+        document.getElementById('display-toggle').textContent = `Display: ${mode[0].toUpperCase()}${mode.slice(1)}`;
+        refresh();
+      });
+
+      window.addEventListener('resize', () => refresh());
+    },
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => window.BellaLocalWheel.init());
+  } else {
+    window.BellaLocalWheel.init();
+  }
+})();
+
+</script>
+</body>
+</html>
